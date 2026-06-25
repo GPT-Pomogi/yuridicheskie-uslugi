@@ -13,8 +13,7 @@
   --radius: 14px;
   --max: 1180px;
   font-family:
-    "Segoe UI",
-    "Trebuchet MS",
+    "Outfit",
     system-ui,
     sans-serif;
 }
@@ -43,8 +42,19 @@ body::before {
   pointer-events: none;
   background:
     radial-gradient(circle at 16% 4%, rgb(23 78 166 / 0.14), transparent 26rem),
-    radial-gradient(circle at 88% 18%, rgb(255 255 255 / 0.9), transparent 22rem);
+    radial-gradient(circle at 88% 18%, rgb(255 255 255 / 0.05), transparent 22rem);
   z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
 a {
@@ -81,6 +91,26 @@ textarea {
   background: rgb(6 11 22 / 0.66);
   box-shadow: 0 16px 48px rgb(0 0 0 / 0.28);
   backdrop-filter: blur(18px) saturate(120%);
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  background: #d9b47a;
+  color: #111827;
+  font-weight: 900;
+  font-size: 14px;
+  z-index: 100;
+  transition: top 0.2s;
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  top: 14px;
 }
 
 .announcement-bar {
@@ -137,9 +167,14 @@ textarea {
 }
 
 .nav a:hover,
-.nav a:focus-visible {
+.nav a:focus-visible,
+.nav a.active {
   color: #ffffff;
   background: rgb(255 255 255 / 0.1);
+}
+
+.nav a.active {
+  font-weight: 700;
 }
 
 .header-cta {
@@ -216,8 +251,9 @@ p {
 h1,
 h2 {
   font-weight: 900;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
   line-height: 0.98;
+  text-wrap: balance;
 }
 
 h1 {
@@ -240,6 +276,7 @@ h3 {
   margin-bottom: 10px;
   font-size: 21px;
   line-height: 1.18;
+  text-wrap: balance;
 }
 
 .hero-lead,
@@ -282,6 +319,11 @@ h3 {
 .button:hover,
 .button:focus-visible {
   transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid #d9b47a;
+  outline-offset: 3px;
 }
 
 .button:active {
@@ -381,6 +423,7 @@ h3 {
   color: #d9b47a;
   font-size: 24px;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .hero-metrics span {
@@ -463,7 +506,7 @@ h3 {
 
 .fit-band .eyebrow,
 .risk-card .eyebrow {
-  color: #a7c5ff;
+  color: #d9b47a;
 }
 
 .fit-layout {
@@ -562,12 +605,12 @@ h3 {
 
 .risk-points div {
   padding: 16px 18px;
+  border: 1px solid rgb(255 255 255 / 0.08);
   border-left: 4px solid var(--danger);
   border-radius: var(--radius);
   background: rgb(255 255 255 / 0.05);
   color: #eef2f8;
   font-weight: 800;
-  border: 1px solid rgb(255 255 255 / 0.08);
 }
 
 .cases {
@@ -639,6 +682,21 @@ h3 {
   margin: 0;
   padding: 0 22px 22px;
   color: rgb(233 237 245 / 0.72);
+}
+
+.faq-list details[open] p {
+  animation: faq-reveal 0.22s ease;
+}
+
+@keyframes faq-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .consultation {
@@ -750,6 +808,22 @@ h3 {
 .footer a {
   color: #d9b47a;
   font-weight: 900;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-legal a {
+  color: rgb(233 237 245 / 0.48);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.footer-legal a:hover {
+  color: rgb(233 237 245 / 0.72);
 }
 
 .floating-contact {

@@ -1,5 +1,24 @@
 const revealItems = document.querySelectorAll("[data-reveal]");
 
+const navLinks = document.querySelectorAll(".nav a[href^='#']");
+const sections = document.querySelectorAll("main section[id]");
+
+if ("IntersectionObserver" in window && navLinks.length && sections.length) {
+  const navObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navLinks.forEach((link) => {
+            link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+          });
+        }
+      });
+    },
+    { rootMargin: "-30% 0px -60% 0px" }
+  );
+  sections.forEach((s) => navObserver.observe(s));
+}
+
 if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -34,8 +53,10 @@ leadForm?.addEventListener("submit", async (event) => {
   }
 
   const submitButton = leadForm.querySelector("button[type='submit']");
+  const originalText = submitButton.textContent;
   submitButton.disabled = true;
-  formStatus.textContent = "Отправляем заявку.";
+  submitButton.textContent = "Отправляем...";
+  formStatus.textContent = "";
 
   try {
     const response = await fetch("/api/lead", {
@@ -54,5 +75,6 @@ leadForm?.addEventListener("submit", async (event) => {
     formStatus.textContent = "Не получилось отправить заявку. Напишите в Telegram или WhatsApp.";
   } finally {
     submitButton.disabled = false;
+    submitButton.textContent = originalText;
   }
 });
